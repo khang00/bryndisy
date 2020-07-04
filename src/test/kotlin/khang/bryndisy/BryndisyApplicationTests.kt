@@ -28,13 +28,4 @@ class BryndisyApplicationTests {
 			content { json("[]") }
 		}
 	}
-
-	@Test
-	fun `task controller should return a task with the specify ID`() {
-		mockMvc.get("/task").andExpect {
-			status { isOk }
-			content { contentType(MediaType.APPLICATION_JSON) }
-			content { json("{}") }
-		}
-	}
 }

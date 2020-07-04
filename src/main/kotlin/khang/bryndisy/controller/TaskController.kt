@@ -8,25 +8,15 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/task")
 class TaskController @Autowired constructor(private val taskRepo: TaskRepository) {
 
-    @GetMapping("/task")
+    @GetMapping
     fun getAllTasks(): ResponseEntity<List<Task>> {
         return ResponseEntity.ok(taskRepo.findAll())
     }
 
-    @GetMapping("/task?id")
-    fun getTaskById(@RequestParam("id") id: ObjectId): ResponseEntity<Task> {
-        val task = taskRepo.findById(id)
-        print(task.toString())
-        return if (task.isPresent) {
-            ResponseEntity.ok(task.get())
-        } else {
-            ResponseEntity.notFound().build()
-        }
-    }
-
-    @PostMapping("/task")
+    @PostMapping
     fun createTask(@RequestBody task: Task): ResponseEntity<Task> {
         return ResponseEntity.ok(taskRepo.save(task))
     }
