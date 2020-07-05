@@ -23,7 +23,9 @@ class Scheduler : ScheduleService {
     }
 
     private val isOptimizable: (Schedule) -> Boolean = { schedule ->
-        true
+        val minStartDate = schedule.tasks.minBy { it.startDate }?.startDate
+        val maxDeadline = schedule.tasks.maxBy { it.deadline }?.deadline
+        schedule.tasks.foldRight(minStartDate, { task , acc -> acc?.plus(task.duration) })!! < maxDeadline
     }
 
     private val sortTask: (Schedule) -> Stream<Task> = { schedule ->
