@@ -33,10 +33,10 @@ class Scheduler : ScheduleService {
     }
 
     private val computeStartDateOfTasks: (Task, () -> List<Task>) -> () -> List<Task> = { task, tasks ->
-        { tasks.invoke().plus(computeStartDateOfTaskPinnedByNow(task, tasks.invoke())) }
+        { tasks.invoke().plus(startDatePinnedByNow(task, tasks.invoke())) }
     }
 
-    private val computeStartDateOfTaskPinnedByDeadline: (Task, List<Task>) -> Task = { task, tasks ->
+    private val startDatePinnedByDeadline: (Task, List<Task>) -> Task = { task, tasks ->
         if (tasks.isEmpty()) {
             task.copy(startDate = task.deadline - task.duration)
         } else {
@@ -44,7 +44,7 @@ class Scheduler : ScheduleService {
         }
     }
 
-    private val computeStartDateOfTaskPinnedByNow: (Task, List<Task>) -> Task = { task, tasks ->
+    private val startDatePinnedByNow: (Task, List<Task>) -> Task = { task, tasks ->
         if (tasks.isEmpty()) {
             task
         } else {
