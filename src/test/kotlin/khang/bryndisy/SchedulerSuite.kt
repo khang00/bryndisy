@@ -14,7 +14,7 @@ class SchedulerSuite {
     private val scheduler: Scheduler = Scheduler()
 
     private val initTasks: (Int) -> Task = { index: Int ->
-        if (index > 5) {
+        if (index < 5) {
             Task(ObjectId.get(),
                     "say hello$index",
                     Duration.ofDays(index.toLong())
@@ -34,9 +34,9 @@ class SchedulerSuite {
         val tasks: List<Task> = List(9, initTasks)
         val schedule = Schedule(ObjectId.get(), "Test", tasks)
         val optimizedSchedule = scheduler.optimizeSchedule(schedule)
-
-        for (task in optimizedSchedule.get().tasks) print("(${task.startDate.dayOfYear}" +
-                ", ${(task.startDate + task.duration).dayOfYear}" +
-                ", ${task.deadline.dayOfYear})\n")
+        print("Now is: ${LocalDate.now().dayOfYear} \n")
+        for (task in optimizedSchedule.get().tasks) print("(Sta:${task.startDate.dayOfYear}" +
+                ", Dur:${task.duration.toDays()}" +
+                ", Dea:${task.deadline.dayOfYear})\n")
     }
 }
