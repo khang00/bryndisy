@@ -13,13 +13,17 @@ class Scheduler : ScheduleService {
     }
 
     override fun optimizeSchedule(schedule: Schedule): Optional<Schedule> {
-        val begin = System.nanoTime()
+        return if (isOptimizable(schedule)) {
+            val optimizedTasks = sortTask(schedule).toList().foldRight({ listOf() }, computeStartDateOfTasks).invoke()
+            val optimizedSchedule = schedule.copy(tasks = optimizedTasks)
+            Optional.of(optimizedSchedule)
+        } else {
+            Optional.empty()
+        }
+    }
 
-        val optimizedTasks = sortTask(schedule).toList().foldRight({ listOf() }, computeStartDateOfTasks)
-
-        val end = System.nanoTime()
-        println("Elapsed Time in nanoseconds : ${end - begin}")
-        return Optional.of(Schedule(ObjectId.get(), "optimized", optimizedTasks.invoke()))
+    private val isOptimizable: (Schedule) -> Boolean = { schedule ->
+        true
     }
 
     private val sortTask: (Schedule) -> Stream<Task> = { schedule ->
