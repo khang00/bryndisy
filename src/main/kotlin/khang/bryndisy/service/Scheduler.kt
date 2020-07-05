@@ -13,7 +13,7 @@ class Scheduler : ScheduleService {
     }
 
     override fun optimizeSchedule(schedule: Schedule): Optional<Schedule> {
-        return if (isOptimizable(schedule)) {
+        return if (schedule.tasks.isNotEmpty() && isOptimizable(schedule)) {
             val optimizedTasks = sortTask(schedule).toList().foldRight({ listOf() }, computeStartDateOfTasks).invoke()
             val optimizedSchedule = schedule.copy(tasks = optimizedTasks)
             Optional.of(optimizedSchedule)
