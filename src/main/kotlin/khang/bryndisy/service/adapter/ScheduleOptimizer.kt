@@ -1,12 +1,11 @@
-package khang.bryndisy.service
+package khang.bryndisy.service.adapter
 
 import khang.bryndisy.model.Schedule
-import org.bson.types.ObjectId
+import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import java.util.*
 
-@Service
-interface ScheduleService {
-    fun getSchedule(id: ObjectId): Schedule
+
+interface ScheduleOptimizer {
     fun optimizeSchedule(schedule: Schedule): Optional<Schedule>
 }

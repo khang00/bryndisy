@@ -2,16 +2,18 @@ package khang.bryndisy
 
 import khang.bryndisy.model.Schedule
 import khang.bryndisy.model.Task
-import khang.bryndisy.service.Scheduler
+import khang.bryndisy.service.adapter.ScheduleService
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-class SchedulerSuite {
-    private val scheduler: Scheduler = Scheduler()
+@SpringBootTest
+class SchedulerSuite @Autowired constructor(private val scheduler: ScheduleService) {
 
     private val initTasks: (Int) -> Task = { index: Int ->
         if (index < 5) {
