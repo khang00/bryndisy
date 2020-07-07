@@ -21,11 +21,6 @@ class MongoDBIntegrationTest {
                 Duration.ofHours(2),
                 LocalDateTime.of(2020, 12, 18, 5, 3))
 
-        // given
-        val objectToSave = BasicDBObjectBuilder.start()
-                .add(task.id.toString(), task)
-                .get()
-
         // when
         mongoTemplate.save(task)
 

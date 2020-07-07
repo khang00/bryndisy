@@ -1,1 +1,1 @@
-web: java -jar target/bryndisy.jar
+web: java -jar build/libs/bryndisy-0.0.1-SNAPSHOT.jar
