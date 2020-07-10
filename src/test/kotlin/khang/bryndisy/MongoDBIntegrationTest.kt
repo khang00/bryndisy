@@ -16,7 +16,7 @@ import java.time.LocalDateTime
 class MongoDBIntegrationTest {
     @Test
     fun test(@Autowired mongoTemplate: MongoTemplate) {
-        val task = Task(ObjectId.get(),
+        val task = Task(ObjectId.get().toHexString(),
                 "say hello",
                 Duration.ofHours(2),
                 LocalDateTime.of(2020, 12, 18, 5, 3))
