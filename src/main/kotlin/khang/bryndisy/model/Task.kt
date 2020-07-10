@@ -9,8 +9,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-@Document
-data class Task(@Id val id: ObjectId,
+data class Task(val id: String = ObjectId.get().toHexString(),
                 val name: String,
                 val duration: Duration,
                 val deadline: LocalDateTime,
