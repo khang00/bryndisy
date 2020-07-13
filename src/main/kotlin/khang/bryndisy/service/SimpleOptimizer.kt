@@ -11,8 +11,7 @@ import kotlin.streams.toList
 class SimpleOptimizer : TasksOptimizer {
     override fun optimizeTasks(tasks: List<Task>): Optional<List<Task>> {
         return if (tasks.isNotEmpty() && isOptimizable(tasks)) {
-            val optimizedTasks = sortTask(tasks).toList().foldRight({ listOf() }, computeStartDateOfTasks).invoke()
-            Optional.of(optimizedTasks)
+            Optional.of(sortTask(tasks).toList().foldRight({ listOf() }, computeStartDateOfTasks).invoke())
         } else {
             Optional.empty()
         }

@@ -2,6 +2,7 @@ package khang.bryndisy.service.adapter
 
 import khang.bryndisy.model.Schedule
 import khang.bryndisy.model.Task
+import khang.bryndisy.model.User
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import java.util.*

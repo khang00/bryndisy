@@ -6,8 +6,8 @@ import java.util.*
 
 interface UserService {
     fun getAllUsers(): List<User>
-    fun getTasksOfUser(id: String): Optional<List<Task>>
-    fun getOptimizedTasksOfUser(id: String): Optional<List<Task>>
+    fun getUserById(id: String): Optional<User>
     fun createUser(user: User): User
     fun createTaskForUser(id: String, task: Task): Optional<User>
+    fun getUserWithOptimizedTasks(id: String) :Optional<User>
 }
