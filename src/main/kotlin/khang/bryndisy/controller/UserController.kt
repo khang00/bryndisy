@@ -25,7 +25,7 @@ class UserController @Autowired constructor(val userService: UserService) {
         }
     }
 
-    @GetMapping("/optimizedTasks/{id}")
+    @GetMapping("/optimizedTasks")
     fun getUserWithOptimizedTasks(@RequestParam("id") id: String): ResponseEntity<User> {
         val user = userService.getUserWithOptimizedTasks(id)
         return if (user.isPresent) {
