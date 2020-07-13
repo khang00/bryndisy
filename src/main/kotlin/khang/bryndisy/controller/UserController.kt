@@ -6,13 +6,33 @@ import khang.bryndisy.service.adapter.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RequestMapping("/")
 @RestController
 class UserController @Autowired constructor(val userService: UserService) {
     @GetMapping
-    fun getAllUsers(): ResponseEntity<List<User>> {
-        return ResponseEntity.ok(userService.getAllUsers())
+    fun getUserById(@RequestParam("id") id: Optional<String>): ResponseEntity<List<User>> {
+        return if (id.isPresent) {
+            val user = userService.getUserById(id.get())
+            if (user.isPresent) {
+                ResponseEntity.ok(listOf(user.get()))
+            } else {
+                ResponseEntity.notFound().build()
+            }
+        } else {
+            return ResponseEntity.ok(userService.getAllUsers())
+        }
+    }
+
+    @GetMapping("/optimizedTasks/{id}")
+    fun getUserWithOptimizedTasks(@RequestParam("id") id: String): ResponseEntity<User> {
+        val user = userService.getUserWithOptimizedTasks(id)
+        return if (user.isPresent) {
+            ResponseEntity.ok(user.get())
+        } else {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @PostMapping
@@ -26,26 +46,6 @@ class UserController @Autowired constructor(val userService: UserService) {
         val userWrapper = userService.createTaskForUser(id, task)
         return if (userWrapper.isPresent) {
             ResponseEntity.ok(userWrapper.get())
-        } else {
-            ResponseEntity.notFound().build()
-        }
-    }
-
-    @GetMapping("/{id}")
-    fun getUserById(@RequestParam("id") id: String): ResponseEntity<User> {
-        val user = userService.getUserById(id)
-        return if (user.isPresent) {
-            ResponseEntity.ok(user.get())
-        } else {
-            ResponseEntity.notFound().build()
-        }
-    }
-
-    @GetMapping("/optimizedTasks/{id}")
-    fun getUserWithOptimizedTasks(@RequestParam("id") id: String): ResponseEntity<User> {
-        val user = userService.getUserWithOptimizedTasks(id)
-        return if (user.isPresent) {
-            ResponseEntity.ok(user.get())
         } else {
             ResponseEntity.notFound().build()
         }

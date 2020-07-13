@@ -2,6 +2,10 @@
 ## API
 * To get all user: __GET "/"__
 
+* To get a user by ID: __GET "/?id=[USER_ID]"__
+
+* To get a user with their optimized tasks: __GET "optimizedTasks/?id=[USER_ID]"__
+
 * To create a user: __POST "/"__
  ```
 {
@@ -10,7 +14,7 @@
 }
 ```
 
-* to create a task for a user: __POST "/userTask"__
+* To create a task for a user: __POST "/userTask"__
 ```
 {
     "first" :"5f081393b15644322c2d4e47",
