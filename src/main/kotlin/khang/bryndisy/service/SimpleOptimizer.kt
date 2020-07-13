@@ -3,15 +3,19 @@ package khang.bryndisy.service
 import khang.bryndisy.model.Task
 import khang.bryndisy.service.adapter.TasksOptimizer
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.util.*
 import java.util.stream.Stream
 import kotlin.streams.toList
 
 @Service
 class SimpleOptimizer : TasksOptimizer {
-    override fun optimizeTasks(tasks: List<Task>): Optional<List<Task>> {
+    override fun optimizeTasks(tasks: List<Task>, offHours: Duration): Optional<List<Task>> {
         return if (tasks.isNotEmpty() && isOptimizable(tasks)) {
-            Optional.of(sortTask(tasks).toList().foldRight({ listOf() }, computeStartDateOfTasks).invoke())
+            val partialComputeStartDateOfTasks =
+                    { x: Task, y: () -> List<Task> -> computeStartDateOfTasks(x, y, offHours) }
+
+            Optional.of(sortTask(tasks).toList().foldRight({ listOf() }, partialComputeStartDateOfTasks).invoke())
         } else {
             Optional.empty()
         }
@@ -27,23 +31,30 @@ class SimpleOptimizer : TasksOptimizer {
         tasks.parallelStream().sorted(compareBy({ it.deadline }, { it.duration }))
     }
 
-    private val computeStartDateOfTasks: (Task, () -> List<Task>) -> () -> List<Task> = { task, tasks ->
-        { tasks.invoke().plus(startDatePinnedByNow(task, tasks.invoke())) }
+    private val computeStartDateOfTasks: (Task, () -> List<Task>, Duration) -> () -> List<Task> = { task, tasks, offHours ->
+        { tasks.invoke().plus(startDatePinnedByNow(task, tasks.invoke(), offHours)) }
     }
 
-    private val startDatePinnedByDeadline: (Task, List<Task>) -> Task = { task, tasks ->
+    private val startDatePinnedByDeadline: (Task, List<Task>, Duration) -> Task = { task, tasks, offHours ->
+        val durationWithBreak = (task.duration.toSeconds() / offHours.toSeconds()) *
+                offHours.toSeconds() +
+                task.duration.toSeconds()
+
         if (tasks.isEmpty()) {
-            task.copy(startDate = task.deadline - task.duration)
+            task.copy(startDate = task.deadline - Duration.ofSeconds(durationWithBreak))
         } else {
-            task.copy(startDate = tasks.last().startDate - task.duration)
+            task.copy(startDate = tasks.last().startDate - Duration.ofSeconds(durationWithBreak))
         }
     }
 
-    private val startDatePinnedByNow: (Task, List<Task>) -> Task = { task, tasks ->
+    private val startDatePinnedByNow: (Task, List<Task>, Duration) -> Task = { task, tasks, offHours ->
         if (tasks.isEmpty()) {
             task
         } else {
-            task.copy(startDate = tasks.last().startDate + tasks.last().duration)
+            val durationWithBreak = (tasks.last().duration.toSeconds() / offHours.toSeconds()) *
+                    offHours.toSeconds() +
+                    tasks.last().duration.toSeconds()
+            task.copy(startDate = tasks.last().startDate + Duration.ofSeconds(durationWithBreak))
         }
     }
 }
