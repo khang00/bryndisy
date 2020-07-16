@@ -17,8 +17,10 @@ class MongoUserService @Autowired constructor(val userRepository: UserRepository
         return userRepository.findAll()
     }
 
-    override fun createUser(user: User): User {
-        return userRepository.save(user)
+    override fun createUser(user: User): Optional<User> {
+        return userRepository.findByNameAndPassword(user.name, user.password)
+                .map { Optional.empty<User>() }
+                .orElse(Optional.of(userRepository.save(user)))
     }
 
     override fun createTaskForUser(id: String, task: Task): Optional<User> {

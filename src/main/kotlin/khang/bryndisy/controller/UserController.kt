@@ -47,7 +47,9 @@ class UserController @Autowired constructor(private val userService: UserService
 
     @PostMapping
     fun createUser(@RequestBody user: User): ResponseEntity<User> {
-        return ResponseEntity.ok(userService.createUser(user))
+        return userService.createUser(user)
+                .map { ResponseEntity.ok(it) }
+                .orElse(ResponseEntity.status(HttpStatus.CONFLICT).build())
     }
 
     @PostMapping("/userTask")

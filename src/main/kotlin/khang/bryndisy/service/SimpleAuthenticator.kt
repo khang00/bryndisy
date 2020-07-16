@@ -1,7 +1,8 @@
-package khang.bryndisy.service.adapter
+package khang.bryndisy.service
 
 import khang.bryndisy.model.User
 import khang.bryndisy.repository.UserRepository
+import khang.bryndisy.service.adapter.AuthenticationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
