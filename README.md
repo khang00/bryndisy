@@ -7,7 +7,7 @@
 * To get a user with their optimized tasks: __GET "optimizedTasks/?id=[USER_ID]"__
 
 * To create a user: __POST "/"__
- ```
+```
 {
     "name": "khang" //user name
     "workDurationPerDay": "PT8H" //work hours, default is 8 hours
@@ -23,5 +23,13 @@
         "duration": "PT3H",
         "deadline": "2020-07-12T07:06:59.000"
     }   //task content
+}
+```
+
+* To authenticate user: __POST "/authenticate"__
+```
+{
+    "name": "khang01",
+    "password": 1
 }
 ```
