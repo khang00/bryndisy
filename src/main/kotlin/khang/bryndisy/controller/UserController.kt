@@ -2,15 +2,18 @@ package khang.bryndisy.controller
 
 import khang.bryndisy.model.Task
 import khang.bryndisy.model.User
+import khang.bryndisy.service.adapter.AuthenticationService
 import khang.bryndisy.service.adapter.UserService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RequestMapping("/")
 @RestController
-class UserController @Autowired constructor(val userService: UserService) {
+class UserController @Autowired constructor(private val userService: UserService,
+                                            private val authenticationService: AuthenticationService) {
     @GetMapping
     fun getUserById(@RequestParam("id") id: Optional<String>): ResponseEntity<List<User>> {
         return if (id.isPresent) {
@@ -33,6 +36,13 @@ class UserController @Autowired constructor(val userService: UserService) {
         } else {
             ResponseEntity.notFound().build()
         }
+    }
+
+    @PostMapping("/authenticate")
+    fun authenticateUser(@RequestBody user: User) :ResponseEntity<User> {
+        return authenticationService.authenticate(user)
+                .map { ResponseEntity.ok(it) }
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build())
     }
 
     @PostMapping

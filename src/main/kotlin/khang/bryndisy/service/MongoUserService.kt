@@ -7,7 +7,6 @@ import khang.bryndisy.service.adapter.TasksOptimizer
 import khang.bryndisy.service.adapter.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.Duration
 import java.util.*
 
 @Service
@@ -36,7 +35,7 @@ class MongoUserService @Autowired constructor(val userRepository: UserRepository
     override fun getUserWithOptimizedTasks(id: String): Optional<User> {
         val user = getUserById(id)
         return if (user.isPresent) {
-            getOptimizedTasks(user.get())
+            tasksOptimizer.optimizeTasks(user.get())
         } else {
             user
         }
@@ -44,15 +43,5 @@ class MongoUserService @Autowired constructor(val userRepository: UserRepository
 
     override fun getUserById(id: String): Optional<User> {
         return userRepository.findById(id)
-    }
-
-    fun getOptimizedTasks(user: User): Optional<User> {
-        val tasks = user.tasks.toList().map { it.second }
-        val optimizedTasks = tasksOptimizer.optimizeTasks(tasks, Duration.ofHours(24) - user.workDurationPerDay)
-        return if (optimizedTasks.isPresent) {
-            Optional.of(user.copy(tasks = optimizedTasks.get().associateBy({ it.id }, { it })))
-        } else {
-            Optional.empty()
-        }
     }
 }

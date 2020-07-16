@@ -1,6 +1,7 @@
 package khang.bryndisy.service
 
 import khang.bryndisy.model.Task
+import khang.bryndisy.model.User
 import khang.bryndisy.service.adapter.TasksOptimizer
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -10,6 +11,16 @@ import kotlin.streams.toList
 
 @Service
 class SimpleOptimizer : TasksOptimizer {
+    override fun optimizeTasks(user: User): Optional<User> {
+        val tasks = user.tasks.toList().map { it.second }
+        val optimizedTasks = optimizeTasks(tasks, Duration.ofHours(24) - user.workDurationPerDay)
+        return if (optimizedTasks.isPresent) {
+            Optional.of(user.copy(tasks = optimizedTasks.get().associateBy({ it.id }, { it })))
+        } else {
+            Optional.empty()
+        }
+    }
+
     override fun optimizeTasks(tasks: List<Task>, offHours: Duration): Optional<List<Task>> {
         return if (tasks.isNotEmpty() && isOptimizable(tasks)) {
             val partialComputeStartDateOfTasks =
