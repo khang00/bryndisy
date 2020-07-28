@@ -9,5 +9,5 @@ import java.time.Duration
 data class User(@Id val id: String = ObjectId.get().toHexString(),
                 val name: String,
                 val password: String = "",
-                val tasks: Map<String, Task> = hashMapOf(),
+                val tasks: Map<String, UserTask> = hashMapOf(),
                 val workDurationPerDay: Duration = Duration.ofSeconds(28800)) // 8 hours

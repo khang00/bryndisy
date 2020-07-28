@@ -1,6 +1,6 @@
 package khang.bryndisy.service
 
-import khang.bryndisy.model.Task
+import khang.bryndisy.model.UserTask
 import khang.bryndisy.model.User
 import khang.bryndisy.repository.UserRepository
 import khang.bryndisy.service.adapter.TasksOptimizer
@@ -23,11 +23,11 @@ class MongoUserService @Autowired constructor(val userRepository: UserRepository
                 .orElse(Optional.of(userRepository.save(user)))
     }
 
-    override fun createTaskForUser(id: String, task: Task): Optional<User> {
+    override fun createTaskForUser(id: String, userTask: UserTask): Optional<User> {
         val userWrapper = userRepository.findById(id)
         return if (userWrapper.isPresent) {
             val user = userWrapper.get()
-            val userWithTaskAdded = user.copy(tasks = user.tasks + Pair(task.id, task))
+            val userWithTaskAdded = user.copy(tasks = user.tasks + Pair(userTask.id, userTask))
             Optional.of(userRepository.save(userWithTaskAdded))
         } else {
             Optional.empty()
@@ -47,8 +47,8 @@ class MongoUserService @Autowired constructor(val userRepository: UserRepository
         return userRepository.findById(id)
     }
 
-    override fun updateTaskOfUser(user: User, updatedTask: Task): User {
-        val updatedTasks = user.tasks.filterKeys { it == updatedTask.id }.mapValues { updatedTask }
+    override fun updateTaskOfUser(user: User, updatedUserTask: UserTask): User {
+        val updatedTasks = user.tasks.filterKeys { it == updatedUserTask.id }.mapValues { updatedUserTask }
         return userRepository.save(user.copy(tasks = user.tasks + updatedTasks))
     }
 }

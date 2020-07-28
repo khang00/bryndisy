@@ -1,6 +1,6 @@
 package khang.bryndisy.controller
 
-import khang.bryndisy.model.Task
+import khang.bryndisy.model.UserTask
 import khang.bryndisy.model.User
 import khang.bryndisy.service.adapter.AuthenticationService
 import khang.bryndisy.service.adapter.UserService
@@ -53,9 +53,9 @@ class UserController @Autowired constructor(private val userService: UserService
     }
 
     @PostMapping("/userTask")
-    fun createTaskForUser(@RequestBody payload: Pair<String, Task>): ResponseEntity<User> {
-        val (userId: String, task: Task) = payload
-        val userWrapper = userService.createTaskForUser(userId, task)
+    fun createTaskForUser(@RequestBody payload: Pair<String, UserTask>): ResponseEntity<User> {
+        val (userId: String, userTask: UserTask) = payload
+        val userWrapper = userService.createTaskForUser(userId, userTask)
         return if (userWrapper.isPresent) {
             ResponseEntity.ok(userWrapper.get())
         } else {
@@ -64,10 +64,10 @@ class UserController @Autowired constructor(private val userService: UserService
     }
 
     @PutMapping("/userTask")
-    fun updateTaskOfUser(@RequestBody payload: Pair<String, Task>): ResponseEntity<User> {
-        val (userId: String, task: Task) = payload
+    fun updateTaskOfUser(@RequestBody payload: Pair<String, UserTask>): ResponseEntity<User> {
+        val (userId: String, userTask: UserTask) = payload
         return userService.getUserById(userId)
-                .map { ResponseEntity.ok(it.copy(tasks = it.tasks.filterKeys { it == task.id }.mapValues { task })) }
+                .map { ResponseEntity.ok(it.copy(tasks = it.tasks.filterKeys { it == userTask.id }.mapValues { userTask })) }
                 .orElse(ResponseEntity.notFound().build())
     }
 }

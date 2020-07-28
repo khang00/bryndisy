@@ -1,8 +1,6 @@
 package khang.bryndisy
 
-import com.mongodb.BasicDBObjectBuilder
-import com.mongodb.DBObject
-import khang.bryndisy.model.Task
+import khang.bryndisy.model.UserTask
 import org.assertj.core.api.Assertions.assertThat
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
@@ -16,7 +14,7 @@ import java.time.LocalDateTime
 class MongoDBIntegrationTest {
     @Test
     fun test(@Autowired mongoTemplate: MongoTemplate) {
-        val task = Task(ObjectId.get().toHexString(),
+        val task = UserTask(ObjectId.get().toHexString(),
                 "say hello",
                 Duration.ofHours(2),
                 LocalDateTime.of(2020, 12, 18, 5, 3))
@@ -25,7 +23,7 @@ class MongoDBIntegrationTest {
         mongoTemplate.save(task)
 
         // then
-        assertThat(mongoTemplate.findById(task.id, Task::class.java))
+        assertThat(mongoTemplate.findById(task.id, UserTask::class.java))
                 .isNotNull
                 .isEqualTo(task)
     }

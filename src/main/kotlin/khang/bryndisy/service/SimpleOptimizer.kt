@@ -1,6 +1,6 @@
 package khang.bryndisy.service
 
-import khang.bryndisy.model.Task
+import khang.bryndisy.model.UserTask
 import khang.bryndisy.model.User
 import khang.bryndisy.service.adapter.TasksOptimizer
 import org.springframework.stereotype.Service
@@ -21,32 +21,32 @@ class SimpleOptimizer : TasksOptimizer {
         }
     }
 
-    override fun optimizeTasks(tasks: List<Task>, offHours: Duration): Optional<List<Task>> {
-        return if (tasks.isNotEmpty() && isOptimizable(tasks)) {
+    override fun optimizeTasks(userTasks: List<UserTask>, offHours: Duration): Optional<List<UserTask>> {
+        return if (userTasks.isNotEmpty() && isOptimizable(userTasks)) {
             val partialComputeStartDateOfTasks =
-                    { x: Task, y: () -> List<Task> -> computeStartDateOfTasks(x, y, offHours) }
+                    { x: UserTask, y: () -> List<UserTask> -> computeStartDateOfTasks(x, y, offHours) }
 
-            Optional.of(sortTask(tasks).toList().foldRight({ listOf() }, partialComputeStartDateOfTasks).invoke())
+            Optional.of(sortUserTask(userTasks).toList().foldRight({ listOf() }, partialComputeStartDateOfTasks).invoke())
         } else {
             Optional.empty()
         }
     }
 
-    private val isOptimizable: (List<Task>) -> Boolean = { tasks ->
+    private val isOptimizable: (List<UserTask>) -> Boolean = { tasks ->
         val minStartDate = tasks.minBy { it.startDate }?.startDate
         val maxDeadline = tasks.maxBy { it.deadline }?.deadline
         tasks.foldRight(minStartDate, { task, acc -> acc?.plus(task.duration) })!! < maxDeadline
     }
 
-    private val sortTask: (List<Task>) -> Stream<Task> = { tasks ->
+    private val sortUserTask: (List<UserTask>) -> Stream<UserTask> = { tasks ->
         tasks.parallelStream().sorted(compareBy({ it.deadline }, { it.duration }))
     }
 
-    private val computeStartDateOfTasks: (Task, () -> List<Task>, Duration) -> () -> List<Task> = { task, tasks, offHours ->
+    private val computeStartDateOfTasks: (UserTask, () -> List<UserTask>, Duration) -> () -> List<UserTask> = { task, tasks, offHours ->
         { tasks.invoke().plus(startDatePinnedByNow(task, tasks.invoke(), offHours)) }
     }
 
-    private val startDatePinnedByDeadline: (Task, List<Task>, Duration) -> Task = { task, tasks, offHours ->
+    private val startDatePinnedByDeadline: (UserTask, List<UserTask>, Duration) -> UserTask = { task, tasks, offHours ->
         val durationWithBreak = (task.duration.toSeconds() / offHours.toSeconds()) *
                 offHours.toSeconds() +
                 task.duration.toSeconds()
@@ -58,7 +58,7 @@ class SimpleOptimizer : TasksOptimizer {
         }
     }
 
-    private val startDatePinnedByNow: (Task, List<Task>, Duration) -> Task = { task, tasks, offHours ->
+    private val startDatePinnedByNow: (UserTask, List<UserTask>, Duration) -> UserTask = { task, tasks, offHours ->
         if (tasks.isEmpty()) {
             task
         } else {
