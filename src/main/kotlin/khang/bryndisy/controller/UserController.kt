@@ -69,9 +69,7 @@ class UserController @Autowired constructor(private val userService: UserService
         val (userId: String, task: RestUserTask) = payload
         return userService.getUserById(userId).map { user ->
             val updatedTasks = user.tasks.filterKeys { it == task.id }.mapValues { UserTask.union(it.value, task) }
-            userService.createUser(user.copy(tasks = user.tasks + updatedTasks))
-                    .map { ResponseEntity.ok(it) }
-                    .orElse(ResponseEntity.notFound().build())
+            ResponseEntity.ok(userService.updateTaskOfUser(user, updatedTasks))
         }.orElse(ResponseEntity.notFound().build())
     }
 }

@@ -10,5 +10,5 @@ interface UserService {
     fun createUser(user: User): Optional<User>
     fun createTaskForUser(id: String, userTask: UserTask): Optional<User>
     fun getUserWithOptimizedTasks(id: String): Optional<User>
-    fun updateTaskOfUser(user: User, updatedUserTask: UserTask): User
+    fun updateTaskOfUser(user: User, updatedTasks: Map<String, UserTask>): User
 }

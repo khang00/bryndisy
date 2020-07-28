@@ -14,8 +14,14 @@ data class UserTask(override val id: String = ObjectId.get().toHexString(),
                     override val startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
                             LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task {
     companion object {
-        fun union(userTask: UserTask, restTask: RestUserTask) :UserTask {
-            return UserTask(name = "aa")
+        fun union(userTask: UserTask, restTask: RestUserTask): UserTask {
+            return userTask.copy(id = restTask.id,
+                    name = restTask.name ?: userTask.name,
+                    duration = restTask.duration ?: userTask.duration,
+                    deadline = restTask.deadline ?: userTask.deadline,
+                    completed = restTask.completed ?: userTask.completed,
+                    startDate = restTask.startDate ?: userTask.startDate
+            )
         }
     }
 }

@@ -1,7 +1,7 @@
 package khang.bryndisy.service
 
-import khang.bryndisy.model.UserTask
 import khang.bryndisy.model.User
+import khang.bryndisy.model.UserTask
 import khang.bryndisy.repository.UserRepository
 import khang.bryndisy.service.adapter.TasksOptimizer
 import khang.bryndisy.service.adapter.UserService
@@ -47,8 +47,7 @@ class MongoUserService @Autowired constructor(val userRepository: UserRepository
         return userRepository.findById(id)
     }
 
-    override fun updateTaskOfUser(user: User, updatedUserTask: UserTask): User {
-        val updatedTasks = user.tasks.filterKeys { it == updatedUserTask.id }.mapValues { updatedUserTask }
+    override fun updateTaskOfUser(user: User, updatedTasks: Map<String, UserTask>): User {
         return userRepository.save(user.copy(tasks = user.tasks + updatedTasks))
     }
 }
