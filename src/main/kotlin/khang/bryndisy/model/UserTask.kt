@@ -6,10 +6,10 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-data class UserTask(val id: String = ObjectId.get().toHexString(),
-                    val name: String,
-                    val duration: Duration,
-                    val deadline: LocalDateTime,
-                    val completed: Boolean = false,
-                    val startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
-                        LocalTime.of(LocalTime.now().hour, LocalTime.now().minute)))
+data class UserTask(override val id: String = ObjectId.get().toHexString(),
+                    override val name: String,
+                    override val duration: Duration,
+                    override val deadline: LocalDateTime,
+                    override val completed: Boolean = false,
+                    override val startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
+                            LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task
