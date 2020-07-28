@@ -39,7 +39,7 @@ class UserController @Autowired constructor(private val userService: UserService
     }
 
     @PostMapping("/authenticate")
-    fun authenticateUser(@RequestBody user: User) :ResponseEntity<User> {
+    fun authenticateUser(@RequestBody user: User): ResponseEntity<User> {
         return authenticationService.authenticate(user)
                 .map { ResponseEntity.ok(it) }
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build())
@@ -54,12 +54,20 @@ class UserController @Autowired constructor(private val userService: UserService
 
     @PostMapping("/userTask")
     fun createTaskForUser(@RequestBody payload: Pair<String, Task>): ResponseEntity<User> {
-        val (id: String, task: Task) = payload
-        val userWrapper = userService.createTaskForUser(id, task)
+        val (userId: String, task: Task) = payload
+        val userWrapper = userService.createTaskForUser(userId, task)
         return if (userWrapper.isPresent) {
             ResponseEntity.ok(userWrapper.get())
         } else {
             ResponseEntity.notFound().build()
         }
+    }
+
+    @PutMapping("/userTask")
+    fun updateTaskOfUser(@RequestBody payload: Pair<String, Task>): ResponseEntity<User> {
+        val (userId: String, task: Task) = payload
+        return userService.getUserById(userId)
+                .map { ResponseEntity.ok(it.copy(tasks = it.tasks.filterKeys { it == task.id }.mapValues { task })) }
+                .orElse(ResponseEntity.notFound().build())
     }
 }

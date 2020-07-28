@@ -47,10 +47,8 @@ class MongoUserService @Autowired constructor(val userRepository: UserRepository
         return userRepository.findById(id)
     }
 
-    override fun updateTaskOfUser(userId: String, updatedTask: Task): Optional<User> {
-        return userRepository.findById(userId).map { user ->
-            val updatedTasks = user.tasks.filterKeys { it == updatedTask.id }.mapValues { updatedTask }
-            userRepository.save(user.copy(tasks = user.tasks + updatedTasks))
-        }
+    override fun updateTaskOfUser(user: User, updatedTask: Task): User {
+        val updatedTasks = user.tasks.filterKeys { it == updatedTask.id }.mapValues { updatedTask }
+        return userRepository.save(user.copy(tasks = user.tasks + updatedTasks))
     }
 }
