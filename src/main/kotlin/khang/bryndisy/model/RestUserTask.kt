@@ -3,7 +3,7 @@ package khang.bryndisy.model
 import java.time.Duration
 import java.time.LocalDateTime
 
-data class RestUserTask(override val id: String? = null,
+data class RestUserTask(override val id: String,
                         override val name: String? = null,
                         override val duration: Duration? = null,
                         override val deadline: LocalDateTime? = null,

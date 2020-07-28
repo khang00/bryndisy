@@ -12,4 +12,10 @@ data class UserTask(override val id: String = ObjectId.get().toHexString(),
                     override val deadline: LocalDateTime,
                     override val completed: Boolean = false,
                     override val startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
-                            LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task
+                            LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task {
+    companion object {
+        fun union(userTask: UserTask, restTask: RestUserTask) :UserTask {
+            return UserTask(name = "aa")
+        }
+    }
+}

@@ -1,8 +1,8 @@
 package khang.bryndisy.controller
 
 import khang.bryndisy.model.RestUserTask
-import khang.bryndisy.model.UserTask
 import khang.bryndisy.model.User
+import khang.bryndisy.model.UserTask
 import khang.bryndisy.service.adapter.AuthenticationService
 import khang.bryndisy.service.adapter.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -65,9 +65,13 @@ class UserController @Autowired constructor(private val userService: UserService
     }
 
     @PutMapping("/userTask")
-    fun updateTaskOfUser(@RequestBody payload: Pair<String, RestUserTask>): ResponseEntity<UserTask> {
+    fun updateTaskOfUser(@RequestBody payload: Pair<String, RestUserTask>): ResponseEntity<User> {
         val (userId: String, task: RestUserTask) = payload
-
-        return ResponseEntity.ok(task)
+        return userService.getUserById(userId).map { user ->
+            val updatedTasks = user.tasks.filterKeys { it == task.id }.mapValues { UserTask.union(it.value, task) }
+            userService.createUser(user.copy(tasks = user.tasks + updatedTasks))
+                    .map { ResponseEntity.ok(it) }
+                    .orElse(ResponseEntity.notFound().build())
+        }.orElse(ResponseEntity.notFound().build())
     }
 }
