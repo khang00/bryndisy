@@ -21,7 +21,8 @@
     "second": {
         "name": "say hi",
         "duration": "PT3H",
-        "deadline": "2020-07-12T07:06:59.000"
+        "deadline": "2020-07-12T07:06:59.000",
+        "priority": "5",
     }   //task content
 }
 ```
