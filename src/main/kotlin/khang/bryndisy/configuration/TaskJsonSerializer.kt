@@ -15,7 +15,7 @@ class TaskJsonSerializer : JsonSerializer<UserTask>() {
             gen.writeStringField("name", value.name)
             gen.writeNumberField("duration", value.duration.toHours())
             gen.writeObjectField("deadlineDate", value.deadline.toLocalDate())
-            gen.writeObjectField("deadlineDate", value.deadline.toLocalTime())
+            gen.writeObjectField("deadlineTime", value.deadline.toLocalTime())
             gen.writeBooleanField("completed", value.completed)
             gen.writeNumberField("priority", value.priority)
             gen.writeObjectField("startDate", value.startDate)
