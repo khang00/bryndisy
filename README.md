@@ -26,12 +26,11 @@
 }
 ```
 
-* To update a task for a user: __PUT "/userTask"__
+* To update a task for a user: __PUT "/userTask/{taskId}"__
 ```
 {
     "first" :"5f081393b15644322c2d4e47", //user id
     "second": {
-            "id": "5f082512665a1b49eac9cdef", // task to be updated
             "name": "say flexible REST API",
             "completed": true
     }   //task content
