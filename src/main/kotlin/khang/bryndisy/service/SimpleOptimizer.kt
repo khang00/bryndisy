@@ -1,7 +1,7 @@
 package khang.bryndisy.service
 
-import khang.bryndisy.model.UserTask
 import khang.bryndisy.model.User
+import khang.bryndisy.model.UserTask
 import khang.bryndisy.service.adapter.TasksOptimizer
 import org.springframework.stereotype.Service
 import java.time.Duration
@@ -39,7 +39,7 @@ class SimpleOptimizer : TasksOptimizer {
     }
 
     private val sortUserTask: (List<UserTask>) -> Stream<UserTask> = { tasks ->
-        tasks.parallelStream().sorted(compareBy({ it.deadline }, { it.duration }))
+        tasks.parallelStream().sorted(compareBy({ it.deadline }, { it.priority }, { it.duration }))
     }
 
     private val computeStartDateOfTasks: (UserTask, () -> List<UserTask>, Duration) -> () -> List<UserTask> = { task, tasks, offHours ->

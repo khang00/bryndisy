@@ -11,6 +11,7 @@ data class UserTask(override val id: String = ObjectId.get().toHexString(),
                     override val duration: Duration,
                     override val deadline: LocalDateTime,
                     override val completed: Boolean = false,
+                    override val priority: Int = 5,
                     override val startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
                             LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task {
     companion object {
@@ -20,6 +21,7 @@ data class UserTask(override val id: String = ObjectId.get().toHexString(),
                     duration = restTask.duration ?: userTask.duration,
                     deadline = restTask.deadline ?: userTask.deadline,
                     completed = restTask.completed ?: userTask.completed,
+                    priority = restTask.priority ?: userTask.priority,
                     startDate = restTask.startDate ?: userTask.startDate
             )
         }

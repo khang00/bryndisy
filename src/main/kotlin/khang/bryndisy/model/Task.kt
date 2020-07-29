@@ -10,4 +10,5 @@ interface Task {
     val deadline: LocalDateTime?
     val completed: Boolean?
     val startDate: LocalDateTime?
+    val priority: Int?
 }
