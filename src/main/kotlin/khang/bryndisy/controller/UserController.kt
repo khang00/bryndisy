@@ -1,6 +1,7 @@
 package khang.bryndisy.controller
 
 import khang.bryndisy.model.RestUserTask
+import khang.bryndisy.model.Task
 import khang.bryndisy.model.User
 import khang.bryndisy.model.UserTask
 import khang.bryndisy.service.adapter.AuthenticationService
@@ -64,11 +65,11 @@ class UserController @Autowired constructor(private val userService: UserService
         }
     }
 
-    @PutMapping("/userTask")
-    fun updateTaskOfUser(@RequestBody payload: Pair<String, RestUserTask>): ResponseEntity<User> {
+    @PutMapping("/userTask/{taskId}")
+    fun updateTaskOfUser(@PathVariable taskId: String, @RequestBody payload: Pair<String, RestUserTask>): ResponseEntity<User> {
         val (userId: String, task: RestUserTask) = payload
         return userService.getUserById(userId).map { user ->
-            val updatedTasks = user.tasks.filterKeys { it == task.id }.mapValues { UserTask.union(it.value, task) }
+            val updatedTasks = user.tasks.filterKeys { it == taskId }.mapValues { UserTask.union(it.value, task) }
             ResponseEntity.ok(userService.updateTaskOfUser(user, updatedTasks))
         }.orElse(ResponseEntity.notFound().build())
     }

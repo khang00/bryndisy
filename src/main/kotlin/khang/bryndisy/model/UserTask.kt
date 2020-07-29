@@ -15,7 +15,7 @@ data class UserTask(override val id: String = ObjectId.get().toHexString(),
                             LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task {
     companion object {
         fun union(userTask: UserTask, restTask: RestUserTask): UserTask {
-            return userTask.copy(id = restTask.id,
+            return userTask.copy(id = restTask.id ?: userTask.id,
                     name = restTask.name ?: userTask.name,
                     duration = restTask.duration ?: userTask.duration,
                     deadline = restTask.deadline ?: userTask.deadline,
