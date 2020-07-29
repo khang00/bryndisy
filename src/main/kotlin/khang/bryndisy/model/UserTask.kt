@@ -14,6 +14,10 @@ data class UserTask(override val id: String = ObjectId.get().toHexString(),
                     override val priority: Int = 5,
                     override val startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
                             LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task {
+
+    val deadlineDate: LocalDate get() = deadline.toLocalDate()
+    val deadlineTime: LocalTime get() = deadline.toLocalTime()
+
     companion object {
         fun union(userTask: UserTask, restTask: RestUserTask): UserTask {
             return userTask.copy(id = restTask.id ?: userTask.id,
