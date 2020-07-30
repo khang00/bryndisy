@@ -49,6 +49,7 @@ The [Front-end](https://github.com/VTKien0310/Bryndisy) is an android app.
 ```
 ## Optimize Algorithm
 Sort simply with a criterion that is the task with the closest deadline, the highest priority and the smallest duration will be done first. Then compute the start date of a task by adding the start date of this task with the duration of the previous task.
+
 ![Formula](https://lh6.googleusercontent.com/B12rNdkUbkt9rCg1hcG1to1V30VWbJZgSZOhHNG00Ktrbl8FLtQ5YDOFuwsjSurFLtKbCzKhE00ou8xOfCazmRsxk6FsuOq6Pj0dmWq_)
 
 ## Technologies
@@ -58,6 +59,7 @@ Spring Boot is perfect for API development. Spring Boot provides Inversion of Co
 
 ## Architecture
 ![Architecture Diagram](https://lh6.googleusercontent.com/UV_3mdIEPODVTffgxJtMP_SD8SqluRrcUAxdUaZH0J3ZE7D4GmI07_HvoZsfmUD2EuJqJySlXuSNGeez5TcTFvveyY_RndDYwukNDRCV)
+
 Controller module is responsible for http communication between client and the API core services. Classes inside the module will parse JSON data to the DTO and pass it to the services for further processing. After processing, services will give back some DTO and the controllers then parse the DTO to JSON wrapped inside a HTTP response and transfer to the client.
 
 All classes inside the adapter module are interfaces. By doing this, we decouple the service layer from the presentation layer ensuring that changing of services is at ease. The Task Optimizer is where we implement the task optimize algorithm. The Authentication Service is for authentication. The User service is for user features.
