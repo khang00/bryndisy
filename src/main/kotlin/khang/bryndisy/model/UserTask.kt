@@ -1,5 +1,6 @@
 package khang.bryndisy.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import org.bson.types.ObjectId
 import java.time.Duration
 import java.time.LocalDate
@@ -14,6 +15,17 @@ data class UserTask(override val id: String = ObjectId.get().toHexString(),
                     override val priority: Int = 5,
                     override val startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
                             LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : Task {
+    @JsonCreator
+    constructor(id: String = ObjectId.get().toHexString(),
+                name: String,
+                duration: Long,
+                deadline: LocalDateTime,
+                completed: Boolean = false,
+                priority: Int = 5,
+                startDate: LocalDateTime = LocalDateTime.of(LocalDate.now(),
+                        LocalTime.of(LocalTime.now().hour, LocalTime.now().minute))) : this(id, name,
+            Duration.ofHours(duration),
+            deadline, completed, priority, startDate)
 
     companion object {
         fun union(userTask: UserTask, restTask: RestUserTask): UserTask {
