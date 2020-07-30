@@ -48,8 +48,8 @@ The back-end API for Bryndisy an automatically scheduler application for 1 perso
 }
 ```
 ## Optimize Algorithm
-Sort simply with a criteria that is the task with the closest deadline, the highest priority and the smallest duration will be done first. Then compute the start date of a task by adding the start date of this task with the duration of the previous task.
-
+Sort simply with a criterion that is the task with the closest deadline, the highest priority and the smallest duration will be done first. Then compute the start date of a task by adding the start date of this task with the duration of the previous task.
+![Formula](https://lh6.googleusercontent.com/B12rNdkUbkt9rCg1hcG1to1V30VWbJZgSZOhHNG00Ktrbl8FLtQ5YDOFuwsjSurFLtKbCzKhE00ou8xOfCazmRsxk6FsuOq6Pj0dmWq_)
 
 ## Technologies
 Kotlin is a good tool to quickly develop an application with low bugs and errors. Kotlin has Null Safety feature which eliminates the danger of null reference exceptions, the most common pitfalls in many programming languages. Furthermore, Kotlin has data classes which are perfect DTO and also support some basic Functional Programming concepts which are good for transformation of data.
@@ -57,6 +57,7 @@ Kotlin is a good tool to quickly develop an application with low bugs and errors
 Spring Boot is perfect for API development. Spring Boot provides Inversion of Control Container and Dependency Injection. The IoC Container manages the object life cycle from creation to deletion which eliminates the need to manually manage the objects creation and deletion. The Dependency Injection pattern automatically injects the created objects into its dependent. These 2 core functionalities make the design of application architecture simple. Furthermore, Spring Boot also provides functionalities such as ORM, Http Communication, MongoDB Persistence, etc.
 
 ## Architecture
+![Architecture Diagram](https://lh6.googleusercontent.com/UV_3mdIEPODVTffgxJtMP_SD8SqluRrcUAxdUaZH0J3ZE7D4GmI07_HvoZsfmUD2EuJqJySlXuSNGeez5TcTFvveyY_RndDYwukNDRCV)
 Controller module is responsible for http communication between client and the API core services. Classes inside the module will parse JSON data to the DTO and pass it to the services for further processing. After processing, services will give back some DTO and the controllers then parse the DTO to JSON wrapped inside a HTTP response and transfer to the client.
 
 All classes inside the adapter module are interfaces. By doing this, we decouple the service layer from the presentation layer ensuring that changing of services is at ease. The Task Optimizer is where we implement the task optimize algorithm. The Authentication Service is for authentication. The User service is for user features.
