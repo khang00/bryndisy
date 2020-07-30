@@ -1,6 +1,6 @@
 # Bryndisy
-The back-end API for Bryndisy an automatically scheduler application for 1 person.
-
+The back-end API for Bryndisy an automatic scheduler application for 1 person.
+The [Front-end](https://github.com/VTKien0310/Bryndisy) is an android app.
 ## API
 * To get all user: __GET "/"__
 
